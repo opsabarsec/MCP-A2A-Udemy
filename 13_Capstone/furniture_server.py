@@ -2,7 +2,7 @@ import os
 
 from dotenv import load_dotenv
 from fastmcp import FastMCP
-from fastmcp.server.auth.providers.bearer import BearerAuthProvider
+from fastmcp.server.auth import JWTVerifier
 
 load_dotenv()
 
@@ -10,7 +10,7 @@ AUTH0_DOMAIN = os.getenv("AUTH0_DOMAIN", "").rstrip("/")
 API_AUDIENCE = os.getenv("API_AUDIENCE", "")
 REQUIRED_SCOPES = ["read:add"]
 
-auth = BearerAuthProvider(
+auth = JWTVerifier(
     jwks_uri=f"{AUTH0_DOMAIN}/.well-known/jwks.json",
     issuer=f"{AUTH0_DOMAIN}/",
     audience=API_AUDIENCE,
@@ -19,7 +19,6 @@ auth = BearerAuthProvider(
 
 server = FastMCP(
     name="FurniturePriceInfoServer",
-    stateless_http=True,
     auth=auth,
 )
 
@@ -56,4 +55,4 @@ def get_furniture_price(name_fragment: str) -> str:
     )
 
 if __name__ == "__main__":
-    server.run(transport="streamable-http", host="0.0.0.0", port=3000)
+    server.run(transport="streamable-http", host="0.0.0.0", port=3000, stateless_http=True)

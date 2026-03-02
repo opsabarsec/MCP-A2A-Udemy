@@ -21,7 +21,7 @@ async def main():
 
     async with client:
         result = await client.call_tool("find_file", {"filename": "helper.py"})
-        print("✅ Found paths:")
+        print("Found paths:")
 
         # pre-v2.10: result was a list of Content objects that had to be iterated.
         # if not result:

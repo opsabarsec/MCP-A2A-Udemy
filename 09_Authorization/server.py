@@ -1,7 +1,7 @@
 import os
 
 from fastmcp import FastMCP
-from fastmcp.server.auth.providers.bearer import BearerAuthProvider
+from fastmcp.server.auth import JWTVerifier
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -10,7 +10,7 @@ AUTH0_DOMAIN = os.environ["AUTH0_DOMAIN"]
 API_AUDIENCE = os.environ.get("API_AUDIENCE", "http://localhost:8000/mcp")
 REQUIRED_SCOPES = ["read:add"]
 
-auth = BearerAuthProvider(
+auth = JWTVerifier(
     jwks_uri=f"{AUTH0_DOMAIN.rstrip('/')}/.well-known/jwks.json",
     issuer=AUTH0_DOMAIN.rstrip("/") + "/",
     audience=API_AUDIENCE,
@@ -19,7 +19,6 @@ auth = BearerAuthProvider(
 
 mcp = FastMCP(
     name="SecureAddServer",
-    stateless_http=True,
     auth=auth,
 )
 
@@ -30,4 +29,4 @@ def add(a: int, b: int) -> int:
 
 
 if __name__ == "__main__":
-    mcp.run(transport="streamable-http", host="127.0.0.1", port=8000)
+    mcp.run(transport="streamable-http", host="127.0.0.1", port=8000, stateless_http=True)

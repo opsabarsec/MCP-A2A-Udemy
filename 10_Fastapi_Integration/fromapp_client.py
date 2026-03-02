@@ -11,37 +11,35 @@ def section(title: str):
 
 async def main() -> None:
     async with Client(StreamableHttpTransport(SERVER)) as session:
-        resources = await session.list_resources()
-        section("Available Resources")
-        for res in resources:
-            print(f"Resource Name: {res.name}    URI: {res.uri}")
-
-        list_uri = str(resources[0].uri)
-
         tools = await session.list_tools()
         section("Available Tools")
         for tool in tools:
             print(f"Tool Name: {tool.name}")
 
-        all_products = await session.read_resource(list_uri)
+        resources = await session.list_resources()
+        section("Available Resources")
+        for res in resources:
+            print(f"Resource Name: {res.name}    URI: {res.uri}")
+
+        # v3.0+: all routes are tools by default, use actual generated tool names
+        tool_names = [t.name for t in tools]
+        list_tool = next(t for t in tool_names if "list_products" in t)
+        create_tool = next(t for t in tool_names if "create_product" in t)
+
         section("All Products (Before)")
-        print(all_products[0].text)
+        all_products = await session.call_tool(list_tool, {})
+        print("Products:", all_products.data)
 
-        create_tool_name = tools[0].name
-
-        section(f"Calling Tool: {create_tool_name}")
+        section(f"Calling Tool: {create_tool}")
         created = await session.call_tool(
-            create_tool_name,
+            create_tool,
             {"name": "Widget", "price": 19.99},
         )
-        # pre-v2.10: result was a list of Content objects
-        # print("Created product:", created[0].text)
-        # v2.10+: result is a single CallToolResult object
         print("Created product:", created.data)
 
-        updated_products = await session.read_resource(list_uri)
         section("All Products (After)")
-        print(updated_products[0].text)
+        updated_products = await session.call_tool(list_tool, {})
+        print("Products:", updated_products.data)
 
 
 if __name__ == "__main__":

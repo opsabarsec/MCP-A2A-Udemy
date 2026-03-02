@@ -27,9 +27,9 @@ async def main():
 
     async with client:
         tools = await client.list_tools()
-        print("→ Available tools:", [t.name for t in tools])
+        print("-> Available tools:", [t.name for t in tools])
 
-        print("→ Calling process_items…")
+        print("-> Calling process_items...")
         items = ["one", "two", "three", "four", "five"]
         result = await client.call_tool("process_items", {"items": items})
         print("RESULT", result)
@@ -39,7 +39,7 @@ async def main():
         
         # v2.10+: result is a single CallToolResult object.
         processed = result.data
-        print("→ Result:", processed)
+        print("-> Result:", processed)
 
 
 if __name__ == "__main__":
