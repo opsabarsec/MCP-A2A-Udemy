@@ -4,7 +4,6 @@ from fastmcp import Context, FastMCP
 
 mcp = FastMCP(
     name="ProgressDemoServer",
-    stateless_http=False,
 )
 
 

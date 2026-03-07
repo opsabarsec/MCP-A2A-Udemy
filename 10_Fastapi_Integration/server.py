@@ -1,6 +1,6 @@
 from fastmcp import FastMCP
 
-mcp = FastMCP("AddServer", stateless_http=True)
+mcp = FastMCP("AddServer")
 
 
 @mcp.tool(description="Add two integers")
