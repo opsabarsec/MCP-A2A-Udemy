@@ -3,6 +3,7 @@ import sys
 
 from mcp import ClientSession
 from mcp.client.stdio import StdioServerParameters, stdio_client
+from mcp.types import TextContent
 
 
 async def main() -> None:
@@ -16,7 +17,9 @@ async def main() -> None:
         async with ClientSession(read, write) as session:
             await session.initialize()
             res = await session.call_tool("add", {"a": 7, "b": 5})
-            print("7 + 5 =", res.content[0].text)
+            text_content = res.content[0]
+            if isinstance(text_content, TextContent):
+                print("7 + 5 =", text_content.text)
 
 
 if __name__ == "__main__":
