@@ -22,8 +22,14 @@ async def sampling_handler(
         lc_msgs.append(SystemMessage(content=params.systemPrompt))
 
     for idx, msg in enumerate(messages, start=1):
-        print(f"[Client] Message #{idx} content:", msg.content.text)
-        lc_msgs.append(HumanMessage(content=msg.content.text))
+        if hasattr(msg.content, "text"):
+            text = msg.content.text
+            print(f"[Client] Message #{idx} content:", text)
+            lc_msgs.append(HumanMessage(content=text))
+        else:
+            print(
+                f"[Client] Message #{idx} has non-text content: {type(msg.content).__name__}"
+            )
 
     llm = ChatOpenAI(
         model="gpt-4o-mini",
@@ -50,7 +56,7 @@ def add(a: int, b: int) -> int:
 
         # pre-v2.10: result was a list of Content objects, so we accessed the first item.
         # print("Generated Docstring:\n", result[0].text)
-        
+
         # v2.10+: result is a single CallToolResult object.
         print("Generated Docstring:\n", result.data)
 

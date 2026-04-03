@@ -1,6 +1,6 @@
 from fastmcp import FastMCP
 
-mcp = FastMCP(name="WeatherServer", stateless_http=True)
+mcp = FastMCP(name="WeatherServer")
 
 
 @mcp.tool(
@@ -18,4 +18,7 @@ def get_weather(city: str) -> str:
 
 
 if __name__ == "__main__":
+    import os
+
+    os.environ["FASTMCP_STATELESS_HTTP"] = "1"
     mcp.run(transport="streamable-http", host="127.0.0.1", port=3000)

@@ -3,7 +3,7 @@ import asyncio
 from dotenv import load_dotenv
 from langchain_core.messages import AIMessage
 from langchain_mcp_adapters.client import MultiServerMCPClient
-from langgraph.prebuilt import create_react_agent
+from langchain.agents import create_agent
 
 load_dotenv()
 
@@ -19,9 +19,9 @@ async def main():
     )
 
     tools = await client.get_tools()
-    agent = create_react_agent("openai:gpt-4o-mini", tools)
+    agent = create_agent("openai:gpt-4o-mini", tools)
 
-    question = "How will the weather be in Munich today?"
+    question = "How will the weather be in Leuven today?"
 
     result = await agent.ainvoke({"messages": question})
 

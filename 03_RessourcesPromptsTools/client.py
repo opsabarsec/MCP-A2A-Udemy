@@ -1,13 +1,14 @@
 import asyncio
 
 from mcp import ClientSession
-from mcp.client.streamable_http import streamablehttp_client
+from mcp.client.streamable_http import streamable_http_client
+from mcp.types import TextContent
 
 SERVER = "http://127.0.0.1:8000/mcp/"
 
 
 async def main() -> None:
-    async with streamablehttp_client(SERVER) as (read, write, _):
+    async with streamable_http_client(SERVER) as (read, write, _):
         async with ClientSession(read, write) as session:
             resources = await session.list_resources()
             print("Resources:", [r.uri for r in resources.resources])
@@ -22,9 +23,10 @@ async def main() -> None:
             recipe_text = recipe_response.contents[0].text
             print("\nRecipe:\n", recipe_text)
 
-            doubled_response = await session.call_tool("double", {"n": 21})
-            doubled_value = doubled_response.content[0].text
-            print(f"\n21 doubled -> {doubled_value}")
+            res = await session.call_tool("double", {"n": 21})
+            text_content = res.content[0]
+            if isinstance(text_content, TextContent):
+                print(f"\n21 doubled -> {text_content.text}")
 
             prompt_response = await session.get_prompt(
                 "review_recipe",

@@ -25,7 +25,7 @@ async def generate_docstring(code: str, ctx: Context) -> str:
         temperature=0.7,
         max_tokens=150,
     )
-    result = response.text.strip()
+    result = (response.text or "").strip()
     print("[Server] Returning docstring:\n", result)
     return result
 

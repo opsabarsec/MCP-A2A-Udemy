@@ -30,13 +30,13 @@ async def main():
         print("-> Available tools:", [t.name for t in tools])
 
         print("-> Calling process_items...")
-        items = ["one", "two", "three", "four", "five"]
+        items = ["taco", "pizza", "queso", "tortillas", "tamales"]
         result = await client.call_tool("process_items", {"items": items})
         print("RESULT", result)
 
         # pre-v2.10: result was a list of Content objects, requiring a list comprehension.
         # processed = [c.text for c in result]
-        
+
         # v2.10+: result is a single CallToolResult object.
         processed = result.data
         print("-> Result:", processed)
