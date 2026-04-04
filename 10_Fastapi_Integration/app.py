@@ -1,10 +1,18 @@
 import uvicorn
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from server import mcp
 
 mcp_app = mcp.http_app(path="/mcp")
 
-app = FastAPI(lifespan=mcp_app.router.lifespan_context)
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    async with mcp_app.lifespan(app):
+        yield
+
+
+app = FastAPI(lifespan=lifespan)
 
 app.mount("/mcpserver", mcp_app)
 

@@ -3,12 +3,14 @@ name = "mcp-a2a-udemy"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 dependencies = [
-    "fastapi>=0.116.1",
-    "fastmcp>=3.0.2",
+    "fastapi",
+    "fastmcp>=3.2.0",
     "ipykernel>=6.29.5",
     "langchain>=0.3.25",
+    "starlette==0.40.0",
+    "sse-starlette==2.4.1",
     "langchain-core>=0.3.60",
     "langchain-mcp-adapters>=0.1.1",
     "langchain-openai>=0.3.17",
