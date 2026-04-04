@@ -16,7 +16,7 @@ AUTH0_CLIENT_ID = os.environ["AUTH0_CLIENT_ID"]
 AUTH0_CLIENT_SECRET = os.environ["AUTH0_CLIENT_SECRET"]
 API_AUDIENCE = os.environ["API_AUDIENCE"]
 
-TOKEN_URL = f"{AUTH0_DOMAIN}/oauth/token"
+TOKEN_URL = f"https://{AUTH0_DOMAIN}/oauth/token"
 
 
 class FurnitureAgent:
